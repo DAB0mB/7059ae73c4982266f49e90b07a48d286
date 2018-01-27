@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
@@ -35,8 +36,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(morgan('combined'));
-app.use(api);
-app.use(twitter);
+app.use('/api', twitter);
 
 if (process.env.NODE_ENV == 'production') {
   app.use(publicfs);

@@ -12,7 +12,7 @@ const router = express.Router();
 router.use(assets);
 router.use(dirs);
 
-router.get('*', (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile('index.html', { root: process.cwd() });
 });
 
