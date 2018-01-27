@@ -1,3 +1,5 @@
+import './app.scss';
+
 import React from 'react';
 import TwitterLogin from 'react-twitter-auth';
 
@@ -24,7 +26,8 @@ class App extends React.Component {
         </div>
       ) :
       (
-        <TwitterLogin loginUrl="/api/connect"
+        <TwitterLogin className="login-btn"
+                      loginUrl="/api/connect"
                       requestTokenUrl="/api/request_oauth"
                       onFailure={this.onFailed.bind(this)}
                       onSuccess={this.onSuccess.bind(this)} />
