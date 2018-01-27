@@ -1,4 +1,4 @@
-# Tweet Twat
+# Twit Twat
 
 To run app:
 

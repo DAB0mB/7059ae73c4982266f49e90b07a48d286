@@ -103,6 +103,7 @@ choosePort(HOST, DEFAULT_PORT)
               WEBPACK_CONFIG: path.resolve(
                 __dirname, '../config/webpack.config.dev.js'
               ) + '[app]',
+              DB_PORT: 27017,
               NODE_ENV: 'development',
               APP_URL: `http://${HOST}:3000`,
             }, process.env, {
