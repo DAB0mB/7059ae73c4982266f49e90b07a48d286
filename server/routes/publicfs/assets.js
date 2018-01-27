@@ -4,9 +4,7 @@ import * as _ from 'lodash';
 import path from 'path';
 import qs from 'qs';
 
-/**
-  Routes files according to asset manifest
- */
+// Routes files according to asset manifest
 
 const router = express.Router();
 const assetsManifestFile = path.resolve(process.cwd(), 'asset-manifest.json');

@@ -1,21 +1,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import mongoose from 'mongoose';
 import morgan from 'morgan';
-import passport from 'passport';
-import TwitterTokenStrategy from 'passport-twitter-token';
-import { User } from './models';
 import { twitter, publicfs } from './routes';
-import { consumerKey, consumerSecret } from './twitterConfig';
-
-mongoose.connect(
-  `mongodb://${process.env.HOST}:${process.env.DB_PORT}/twit-twat_${process.env.NODE_ENV}`
-);
-
-passport.use(new TwitterTokenStrategy({
-  consumerKey,
-  consumerSecret,
-}, User.upsertTwitterUser.bind(User)));
 
 const app = express();
 
