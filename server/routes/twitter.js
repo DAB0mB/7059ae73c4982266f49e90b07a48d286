@@ -10,7 +10,7 @@ import { consumerKey, consumerSecret } from '../twitterConfig';
 const router = express.Router();
 const SECRET = '123salty_fish!';
 
-//token handling middleware
+// Token handling middleware
 const authenticate = expressJwt({
   secret: SECRET,
   requestProperty: 'auth',
@@ -83,7 +83,7 @@ router.get('/tweets', authenticate, getCurrentUser, getOne, (req, res) => {
     count: 100,
   });
 
-  request.get(`https://api.twitter.com/search/tweets.json?${queryStr}`, (err, r, body) => {
+  request.get(`https://api.twitter.com/1.1/search/tweets.json?${queryStr}`, (err, r, body) => {
     if (err) {
       return res.send(500, { message: err.message });
     }
@@ -94,15 +94,20 @@ router.get('/tweets', authenticate, getCurrentUser, getOne, (req, res) => {
   });
 });
 
-router.post('/disconnect', authenticate, getCurrentUser, getOne, (req, res) => {
-  if (req.headers['x-auth-token']) {
-    delete req.headers['x-auth-token'];
+router.post('/disconnect', authenticate, (req, res) => {
+  res.removeHeader('x-auth-token');
 
-    return res.send(req.user.id);
-  }
-
-  res.send(401, 'User Not Authenticated');
+  User.findByIdAndRemove(req.auth.id, (err) => {
+    if (err) {
+      res.send(500, { message: err.message });
+    }
+    else {
+      res.send(req.auth.id);
+    }
+  });
 });
+
+router.get('/me', authenticate, getCurrentUser, getOne);
 
 function generateToken(req, res, next) {
   req.token = createToken(req.auth);
@@ -142,7 +147,19 @@ function getOne(req, res) {
   delete user['twitterProvider'];
   delete user['__v'];
 
-  res.json(user);
+  request.get(
+    `https://api.twitter.com/1.1/users/show.json?user_id=${user.id}`,
+  (err, r, body) => {
+    if (err) {
+      return res.send(500, { message: err.message });
+    }
+
+    body = qs.parse(body);
+
+    Object.assign(user, body);
+
+    res.send(user);
+  });
 }
 
 export default router;

@@ -52,7 +52,16 @@ class App extends React.Component {
   }
 
   logout() {
-    this.setState({ isAuthenticated: false, token: '', user: null });
+    fetch('/api/disconnect', {
+      method: 'POST',
+      headers: new Headers({
+        'x-auth-token': this.state.token
+      })
+    }).then(() => {
+      this.setState({ isAuthenticated: false, token: '', user: null });
+    }).catch((err) => {
+      this.onFailed(err);
+    });
   }
 }
 
