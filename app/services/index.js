@@ -1,1 +1,1 @@
-export const api = require('./api');
+export const twitter = require('./twitter');

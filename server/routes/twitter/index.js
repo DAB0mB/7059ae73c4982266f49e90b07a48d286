@@ -3,12 +3,12 @@ import expressJwt from 'express-jwt';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import request from 'request';
+import { TWITTER_API, TWITTER_API_1_1 } from '~/common/consts';
 import { consumerKey, consumerSecret } from './config';
 
 // This module contains Twitter related routes
 
 const SECRET = '123salty_fish!';
-const TWITTER_API_URL = 'https://api.twitter.com';
 
 const router = express.Router();
 
@@ -29,7 +29,7 @@ const authenticate = expressJwt({
 // Requests an oauth token from Twitter's API
 router.post('/request_oauth', (req, res) => {
   request.post({
-    url: `${TWITTER_API_URL}/oauth/request_token`,
+    url: `${TWITTER_API}/oauth/request_token`,
     oauth: {
       oauth_callback: 'http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback',
       consumer_key: consumerKey,
@@ -47,7 +47,7 @@ router.post('/request_oauth', (req, res) => {
 // Connects to Twitter using the received token and responds with the user's profile info
 router.post('/connect', (req, res, next) => {
   request.post({
-    url: `${TWITTER_API_URL}/oauth/access_token?oauth_verifier`,
+    url: `${TWITTER_API}/oauth/access_token?oauth_verifier`,
     oauth: {
       consumer_key: consumerKey,
       consumer_secret: consumerSecret,
@@ -68,7 +68,11 @@ router.post('/connect', (req, res, next) => {
     res.setHeader('x-auth-token', token);
 
     request.get({
-      url: `${TWITTER_API_URL}/users/show.json?user_id=${userId}`,
+      url: `${TWITTER_API_1_1}/users/show.json?user_id=${userId}`,
+      oauth: {
+        consumer_key: consumerKey,
+        consumer_secret: consumerSecret,
+      },
     }, (err, r, body) => {
       if (err) {
         return res.send(500, { message: err.message });
@@ -82,7 +86,11 @@ router.post('/connect', (req, res, next) => {
 // Gets all tweets from authenticated user
 router.get('/tweets', authenticate, (req, res) => {
   request.get({
-    url: `${TWITTER_API_URL}/statuses/user_timeline.json?user_id=${req.auth.id}`,
+    url: `${TWITTER_API_1_1}/statuses/user_timeline.json?user_id=${req.auth.id}`,
+    oauth: {
+      consumer_key: consumerKey,
+      consumer_secret: consumerSecret,
+    },
   }, (err, r, body) => {
     if (err) {
       return res.send(500, { message: err.message });

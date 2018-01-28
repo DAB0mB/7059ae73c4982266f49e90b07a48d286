@@ -1,71 +1,80 @@
 import './app.scss';
 
 import React from 'react';
-import TwitterLogin from 'react-twitter-auth';
+import { TwitterLogin } from './components';
+import { store } from './state';
 
 class App extends React.Component {
   constructor() {
     super();
 
-    this.state = { isAuthenticated: false, user: null, token: '' };
+    this.state = store.getState();
+
+    this.unsubscribe = store.subscribe(() => {
+      this.setState(store.getState());
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   render() {
-    const content = !!this.state.isAuthenticated ?
-      (
-        <div>
-          <p>Authenticated</p>
-          <div>
-            {this.state.user.email}
-          </div>
-          <div>
-            <button onClick={this.logout.bind(this)} className="button" >
-              Log out
-            </button>
-          </div>
-        </div>
-      ) :
-      (
-        <TwitterLogin className="login-btn"
-                      loginUrl="/api/connect"
-                      requestTokenUrl="/api/request_oauth"
-                      onFailure={this.onFailed.bind(this)}
-                      onSuccess={this.onSuccess.bind(this)} />
-      );
-
     return (
       <div className="App">
-        {content}
+        {this.state.authenticated ?
+          <Logout disconnect={this.disconnect.bind(this)} user={this.state.user} /> :
+          <Login setConnection={this.setConnection.bind(this)} />
+        }
       </div>
     );
   }
 
-  onSuccess(response) {
-    const token = response.headers.get('x-auth-token');
+  setConnection(res) {
+    const token = res.headers.get('x-auth-token');
 
-    response.json().then(user => {
-      if (token) {
-        this.setState({ isAuthenticated: true, user: user, token: token });
-      }
-    });
+    if (!token) return;
+
+    res.json()
+      .then(user => store.dispatch({
+        type: 'CONNECT',
+        payload: { user, token },
+      }))
+      .then(() => store.dispatch({
+        type: 'TWEETS_REQUEST',
+        payload: { token },
+      }));
   }
 
-  onFailed(err) {
-    alert(err);
+  disconnect() {
+    store.dispatch({ type: 'DISCONNECT_REQUEST' });
   }
+}
 
-  logout() {
-    fetch('/api/disconnect', {
-      method: 'POST',
-      headers: new Headers({
-        'x-auth-token': this.state.token
-      })
-    }).then(() => {
-      this.setState({ isAuthenticated: false, token: '', user: null });
-    }).catch((err) => {
-      this.onFailed(err);
-    });
-  }
+function Login(props) {
+  return (
+    <TwitterLogin className="Login"
+                  loginUrl="/api/connect"
+                  requestTokenUrl="/api/request_oauth"
+                  onSuccess={props.setConnection}
+                  onFailure={alert} />
+  );
+}
+
+function Logout(props) {
+  return (
+    <div className="Logout">
+      <p>Authenticated</p>
+      <div>
+        {props.user.name}
+      </div>
+      <div>
+        <button onClick={props.disconnect} className="button" >
+          Log out
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default App;
