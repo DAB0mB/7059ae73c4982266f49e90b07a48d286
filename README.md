@@ -8,6 +8,10 @@ To run server:
 
     $ npm run server
 
-On production:
+On production, first build:
+
+    $ npm build
+
+And then start:
 
     $ npm start
