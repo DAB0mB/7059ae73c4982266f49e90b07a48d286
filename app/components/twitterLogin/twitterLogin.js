@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import { TWITTER_API } from '~/common/consts';
 
+// https://github.com/GenFirst/react-twitter-auth
 class TwitterLogin extends React.Component {
   static propTypes = {
     text: PropTypes.string,

@@ -1,5 +1,3 @@
-import './app.scss';
-
 import React from 'react';
 import { TwitterLogin } from './components';
 import { store } from './state';
