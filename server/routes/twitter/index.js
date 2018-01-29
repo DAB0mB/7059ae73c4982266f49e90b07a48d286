@@ -107,7 +107,7 @@ router.get('/tweets', authenticate, (req, res) => {
     const tweets = JSON.parse(body).map((tweet) => {
       return {
         text: tweet.text,
-        tweetedAt: moment(tweet.created_at).startOf('hour').fromNow()
+        tweetedAt: moment(new Date(tweet.created_at)).startOf('hour').fromNow(),
       };
     });
 
