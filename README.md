@@ -1,17 +1,23 @@
 # Twit Twat
 
-To run app:
+### To run in development
+
+Terminal #1:
 
     $ npm run app
 
-To run server:
+Terminal #2:
 
     $ npm run server
 
-On production, first build:
+Connect to `localhost:3000`
+
+### To run in production
+
+Build:
 
     $ npm build
 
-And then start:
+Start:
 
     $ npm start
