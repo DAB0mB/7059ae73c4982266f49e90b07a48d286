@@ -46,7 +46,7 @@ class MyTweets extends React.Component {
         <RefreshIcon className="MyTweets-refresh"
                      color="silver"
                      size={35}
-                     onClick={this.disconnect.bind(this)} />
+                     onClick={this.fetchTweets.bind(this)} />
 
         <ul className="MyTweets-tweets-list">
           {this.state.tweets.map((tweet, index) => (
@@ -58,6 +58,10 @@ class MyTweets extends React.Component {
         </ul>
       </div>
     );
+  }
+
+  fetchTweets() {
+    store.dispatch({ type: 'TWEETS_REQUEST' });
   }
 
   disconnect() {
