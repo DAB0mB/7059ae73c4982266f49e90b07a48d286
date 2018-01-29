@@ -1,6 +1,7 @@
 import express from 'express';
 import expressJwt from 'express-jwt';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
 import qs from 'qs';
 import request from 'request';
 import { TWITTER_API, TWITTER_API_1_1 } from '~/common/consts';
@@ -78,7 +79,14 @@ router.post('/connect', (req, res, next) => {
         return res.send(500, { message: err.message });
       }
 
-      res.send(qs.parse(body));
+      const { name, profile_image_url } = JSON.parse(body);
+
+      res.send({
+        // E.g. Eytan Manor
+        name: name,
+        // Remove resize attribute e.g. xyz_normal.jpg -> xyz.jpg
+        profilePic: profile_image_url.replace(/_[^./]+(\.[^.]+)$/, '$1'),
+      });
     });
   });
 });
@@ -96,7 +104,14 @@ router.get('/tweets', authenticate, (req, res) => {
       return res.send(500, { message: err.message });
     }
 
-    res.send(qs.parse(body));
+    const tweets = JSON.parse(body).map((tweet) => {
+      return {
+        text: tweet.text,
+        tweetedAt: moment(tweet.created_at).startOf('hour').fromNow()
+      };
+    });
+
+    res.send(tweets);
   });
 });
 

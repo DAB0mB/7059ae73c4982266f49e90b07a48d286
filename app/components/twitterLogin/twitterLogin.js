@@ -8,7 +8,7 @@ import { TWITTER_API } from '~/common/consts';
 // https://github.com/GenFirst/react-twitter-auth
 class TwitterLogin extends React.Component {
   static propTypes = {
-    text: PropTypes.string,
+    size: PropTypes.number,
     loginUrl: PropTypes.string.isRequired,
     requestTokenUrl: PropTypes.string.isRequired,
     onFailure: PropTypes.func.isRequired,
@@ -23,7 +23,7 @@ class TwitterLogin extends React.Component {
   }
 
   static defaultProps = {
-    text: 'Sign in with Twitter',
+    size: 25,
     disabled: false,
     dialogWidth: 600,
     dialogHeight: 400,
@@ -131,18 +131,18 @@ class TwitterLogin extends React.Component {
   }
 
   getDefaultButtonContent() {
-    const defaultIcon = this.props.showIcon? <TwitterIcon color='#00aced' size={25}/> : null;
+    const defaultIcon = this.props.showIcon ? <TwitterIcon color="white" size={this.props.size}/> : null;
 
     return (
       <span>
-        {defaultIcon} {this.props.text}
+        {defaultIcon}
       </span>
     );
   }
 
   render() {
     return (
-      <button className={`TwitterLogin ${this.props.className}`}
+      <button className={`TwitterLogin ${this.props.className || ''}`}
               disabled={this.props.disabled}
               style={this.props.style}
               onClick={this.onButtonClick} >

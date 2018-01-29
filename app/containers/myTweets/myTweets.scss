@@ -1,0 +1,77 @@
+.MyTweets {
+  height: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  .MyTweets-sign-out {
+    margin: 10px;
+    cursor: pointer;
+  }
+
+  .MyTweets-profile-pic {
+    margin: auto;
+    display: block;
+    border-radius: 50%;
+    margin-top: -30px;
+  }
+
+  .MyTweets-user-name {
+    color: black;
+    font-size: 2.7em;
+    font-weight: bold;
+    margin-right: 20px;
+  }
+
+  .MyTweets-prologue {
+    margin-left: calc(50% - 500px);
+    border-bottom: 1px solid silver;
+    padding-left: 20px;
+    height: 40px;
+  }
+
+  .MyTweets-refresh {
+    cursor: pointer;
+  }
+
+  .MyTweets-body {
+    $width: 512px;
+
+    position: relative;
+    width: $width;
+    overflow: overlay;
+    max-height: 100%;
+    left: calc(50% - #{$width / 2});
+  }
+
+  .MyTweets-refresh {
+    margin: 10px auto;
+    display: block;
+  }
+
+  .MyTweets-tweets-list {
+    display: block;
+    list-style: none;
+    width: 600px;
+    margin: auto;
+    padding: 10px;
+    overflow-y: overlay;
+    overflow-x: hidden;
+    height: calc(100% - 393px);
+  }
+
+  .MyTweets-tweet-item {
+    border: 1px solid rgb(0, 172, 237);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .MyTweets-tweet-text {
+    margin: 10px;
+  }
+
+  .MyTweets-tweet-date {
+    font-size: 0.8em;
+    float: right;
+    color: gray;
+  }
+}
