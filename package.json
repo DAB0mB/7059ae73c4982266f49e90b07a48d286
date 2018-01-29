@@ -24,6 +24,7 @@
     "react-icons": "^2.2.7",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
+    "request": "^2.83.0",
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
